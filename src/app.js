@@ -6,7 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const workoutRoutes = require('./routes/workoutRoutes');
 const progressRoutes = require('./routes/progressRoutes');
 const errorMiddleware = require('./middlewares/errorMiddleware');
-const customWorkoutRoutes = require('./routes/CustomWorkoutRoutes');
+const customWorkoutRoutes = require('./routes/customWorkoutRoutes');
 
 const app = express();
 
