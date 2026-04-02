@@ -1,0 +1,81 @@
+const pool = require('../config/db');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+async function register(req, res, next) {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Preencha nome, email e senha.' });
+    }
+
+    const [existing] = await pool.execute(
+      'SELECT id FROM users WHERE email = ?',
+      [email]
+    );
+
+    if (existing.length > 0) {
+      return res.status(409).json({ message: 'Email já cadastrado.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const [result] = await pool.execute(
+      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+      [name, email, hashedPassword]
+    );
+
+    return res.status(201).json({
+      message: 'Usuário criado com sucesso.',
+      userId: result.insertId
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function login(req, res, next) {
+  try {
+    const { email, password } = req.body;
+
+    const [rows] = await pool.execute(
+      'SELECT * FROM users WHERE email = ?',
+      [email]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({ message: 'Credenciais inválidas.' });
+    }
+
+    const user = rows[0];
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Credenciais inválidas.' });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, plan: user.plan },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    return res.json({
+      message: 'Login realizado com sucesso.',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        body_type: user.body_type,
+        goal: user.goal,
+        plan: user.plan
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login };
