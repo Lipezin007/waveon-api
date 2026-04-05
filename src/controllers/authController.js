@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 async function register(req, res, next) {
   try {
+    console.log('REGISTER BODY:', req.body);
+
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -31,18 +33,18 @@ async function register(req, res, next) {
       userId: result.insertId
     });
   } catch (error) {
-  console.error('BACKEND ERROR:', error);
-  console.error('SQL MESSAGE:', error?.sqlMessage);
-  console.error('SQL CODE:', error?.code);
-  console.error('SQL:', error?.sql);
+    console.error('REGISTER ERROR:', error);
+    console.error('SQL MESSAGE:', error?.sqlMessage);
+    console.error('SQL CODE:', error?.code);
+    console.error('SQL:', error?.sql);
 
-  return res.status(500).json({
-    message: 'Erro interno do servidor.',
-    error: error?.message || '',
-    sqlMessage: error?.sqlMessage || '',
-    code: error?.code || '',
-  });
-}
+    return res.status(500).json({
+      message: 'Erro interno do servidor.',
+      error: error?.message || '',
+      sqlMessage: error?.sqlMessage || '',
+      code: error?.code || '',
+    });
+  }
 }
 
 async function login(req, res, next) {
