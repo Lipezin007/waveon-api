@@ -64,17 +64,18 @@ async function createWorkoutSession(req, res, next) {
       sessionId: workoutSessionId,
     });
   } catch (error) {
-    if (connection) {
-      await connection.rollback();
-    }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
 
-    console.error('CREATE WORKOUT SESSION ERROR:', error);
-    next(error);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 async function getWorkoutSessions(req, res, next) {
@@ -89,9 +90,18 @@ async function getWorkoutSessions(req, res, next) {
 
     return res.json(sessions);
   } catch (error) {
-    console.error('GET WORKOUT SESSIONS ERROR:', error);
-    next(error);
-  }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
+
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 async function getWorkoutSessionExercises(req, res, next) {
@@ -107,9 +117,18 @@ async function getWorkoutSessionExercises(req, res, next) {
 
     return res.json(rows);
   } catch (error) {
-    console.error('GET WORKOUT SESSION EXERCISES ERROR:', error);
-    next(error);
-  }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
+
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 module.exports = {

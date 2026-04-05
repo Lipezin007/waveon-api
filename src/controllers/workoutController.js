@@ -14,9 +14,18 @@ async function listWorkouts(req, res, next) {
 
     return res.json(formatted);
   } catch (error) {
-    console.error('LIST WORKOUTS ERROR:', error);
-    next(error);
-  }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
+
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 async function getWorkoutById(req, res, next) {
@@ -38,9 +47,18 @@ async function getWorkoutById(req, res, next) {
       description: workout.description,
     });
   } catch (error) {
-    console.error('GET WORKOUT ERROR:', error);
-    next(error);
-  }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
+
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 module.exports = {

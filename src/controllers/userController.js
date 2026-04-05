@@ -25,8 +25,18 @@ async function getProfile(req, res, next) {
 
     return res.json(rows[0]);
   } catch (error) {
-    next(error);
-  }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
+
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 async function updateProfile(req, res, next) {
@@ -85,8 +95,18 @@ async function updateProfile(req, res, next) {
       user: rows[0],
     });
   } catch (error) {
-    next(error);
-  }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
+
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 async function updateUserPlan(req, res, next) {
@@ -127,9 +147,18 @@ async function updateUserPlan(req, res, next) {
       user: rows[0],
     });
   } catch (error) {
-    console.error('ERROR UPDATE PLAN:', error);
-    next(error);
-  }
+  console.error('BACKEND ERROR:', error);
+  console.error('SQL MESSAGE:', error?.sqlMessage);
+  console.error('SQL CODE:', error?.code);
+  console.error('SQL:', error?.sql);
+
+  return res.status(500).json({
+    message: 'Erro interno do servidor.',
+    error: error?.message || '',
+    sqlMessage: error?.sqlMessage || '',
+    code: error?.code || '',
+  });
+}
 }
 
 module.exports = {
