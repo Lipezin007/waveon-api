@@ -119,4 +119,4 @@ documentação automática (Swagger)
 deploy em ambiente cloud
 
 👨‍💻 Autor
-Desenvolvido por Felippe Pedroso como projeto real e parte do portfólio profissional.
+Desenvolvido por Felippe Pedroso 
