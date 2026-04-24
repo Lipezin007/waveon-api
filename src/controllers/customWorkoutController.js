@@ -46,16 +46,16 @@ async function createCustomWorkout(req, res, next) {
       workoutId: customWorkoutId,
     });
   } catch (error) {
-  console.error('BACKEND ERROR:', error);
-  console.error('SQL MESSAGE:', error?.sqlMessage);
-  console.error('SQL CODE:', error?.code);
-  console.error('SQL:', error?.sql);
-
+  if (connection) {
+    try {
+      await connection.rollback();
+    } catch (rollbackError) {
+      console.error('ROLLBACK ERROR:', rollbackError);
+    }
+  }
+  console.error('CREATE_CUSTOM_WORKOUT ERROR:', error);
   return res.status(500).json({
     message: 'Erro interno do servidor.',
-    error: error?.message || '',
-    sqlMessage: error?.sqlMessage || '',
-    code: error?.code || '',
   });
 } finally {
     if (connection) {
@@ -84,16 +84,9 @@ async function getCustomWorkouts(req, res, next) {
 
     return res.json(rows);
   } catch (error) {
-  console.error('BACKEND ERROR:', error);
-  console.error('SQL MESSAGE:', error?.sqlMessage);
-  console.error('SQL CODE:', error?.code);
-  console.error('SQL:', error?.sql);
-
+  console.error('GET_CUSTOM_WORKOUTS ERROR:', error);
   return res.status(500).json({
     message: 'Erro interno do servidor.',
-    error: error?.message || '',
-    sqlMessage: error?.sqlMessage || '',
-    code: error?.code || '',
   });
 }
 }
@@ -132,16 +125,9 @@ async function getCustomWorkoutById(req, res, next) {
       })),
     });
   } catch (error) {
-  console.error('BACKEND ERROR:', error);
-  console.error('SQL MESSAGE:', error?.sqlMessage);
-  console.error('SQL CODE:', error?.code);
-  console.error('SQL:', error?.sql);
-
+  console.error('GET_CUSTOM_WORKOUT_BY_ID ERROR:', error);
   return res.status(500).json({
     message: 'Erro interno do servidor.',
-    error: error?.message || '',
-    sqlMessage: error?.sqlMessage || '',
-    code: error?.code || '',
   });
 }
 }

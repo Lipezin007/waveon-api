@@ -7,6 +7,7 @@ const workoutRoutes = require('./routes/workoutRoutes');
 const progressRoutes = require('./routes/progressRoutes');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const customWorkoutRoutes = require('./routes/customWorkoutRoutes');
+const nutritionRoutes = require('./routes/nutritionRoutes');
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.use('/users', userRoutes);
 app.use('/workouts', workoutRoutes);
 app.use('/progress', progressRoutes);
 app.use('/custom-workouts', customWorkoutRoutes);
-
+app.use('/api', nutritionRoutes);
 app.use(errorMiddleware);
 
 module.exports = app;
