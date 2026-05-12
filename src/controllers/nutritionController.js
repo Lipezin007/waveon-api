@@ -164,7 +164,7 @@ async function getNutritionWater(req, res) {
     );
 
     if (!rows.length) {
-      return res.json({ water_ml: 1250 });
+      return res.json({ water_ml: 0 });
     }
 
     return res.json(rows[0]);
@@ -177,7 +177,7 @@ async function getNutritionWater(req, res) {
 async function upsertNutritionWater(req, res) {
   try {
     const userId = req.user.id;
-    const { entry_date, water_ml = 1250 } = req.body;
+    const { entry_date, water_ml = 0 } = req.body;
 
     if (!entry_date) {
       return res.status(400).json({ message: 'Entry date is required.' });
